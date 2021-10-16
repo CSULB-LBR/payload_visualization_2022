@@ -1,5 +1,5 @@
 import React from "react";
-import { FreeCamera, Vector3, HemisphericLight, MeshBuilder, Mesh } from "@babylonjs/core";
+import { ArcRotateCamera, Vector3, HemisphericLight, MeshBuilder, Mesh } from "@babylonjs/core";
 import { Scene } from "@babylonjs/core";
 import BabylonScene from "./BabylonScene"; // uses above component in same directory
 // import SceneComponent from 'babylonjs-hook'; // if you install 'babylonjs-hook' NPM.
@@ -9,10 +9,7 @@ let box: Mesh;
 
 const onSceneReady = (scene: Scene): void => {
   // This creates and positions a free camera (non-mesh)
-  const camera = new FreeCamera("camera1", new Vector3(0, 5, -10), scene);
-
-  // This targets the camera to scene origin
-  camera.setTarget(Vector3.Zero());
+  const camera = new ArcRotateCamera("camera1", Math.PI / 4, Math.PI / 4, 15, Vector3.Zero(), scene);
 
   const canvas = scene.getEngine().getRenderingCanvas();
 
@@ -47,6 +44,8 @@ const onRender = (scene: Scene): void => {
   }
 };
 
-export default () => (
+const PayloadScene = () => (
     <BabylonScene antialias onSceneReady={onSceneReady} onRender={onRender} id="my-canvas" />
 );
+
+export default PayloadScene;

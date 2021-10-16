@@ -12,7 +12,7 @@ export type BabylonProps = {
     onSceneReady: (scene: Scene) => void;
 };
 
-export default (props: BabylonProps) => {
+const BabylonScene = (props: BabylonProps) => {
   const reactCanvas = useRef(null);
   const { antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, ...rest } = props;
 
@@ -49,7 +49,10 @@ export default (props: BabylonProps) => {
         }
       };
     }
+    // eslint-disable-next-line 
   }, [reactCanvas]);
 
   return <canvas ref={reactCanvas} {...rest} />;
 };
+
+export default BabylonScene;
