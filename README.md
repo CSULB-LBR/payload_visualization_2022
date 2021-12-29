@@ -1,10 +1,27 @@
 # Getting Started with Create React App
 
+## Installing Dependencies
+
+You will need to install node and yarn to build and run the project.
+
+To install node (Using brew in MacOs):
+
+`brew install node`
+
+To install yarn:
+
+`npm install --global yarn`
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `yarn`
+
+Runs the initial setup and installation for the project.
 
 ### `yarn start`
 
