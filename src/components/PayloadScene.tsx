@@ -24,6 +24,9 @@ const onSceneReady = (scene: Scene): void => {
   // Targets the camera to a particular position. In this case the scene origin
   fixedCamera.setTarget(Vector3.Zero());
 
+  // Remove all inputs for the camera, we don't want to handle any.
+  fixedCamera.inputs.clear();
+
   const canvas = scene.getEngine().getRenderingCanvas();
 
   // This attaches the camera to the canvas
@@ -52,8 +55,11 @@ const onSceneReady = (scene: Scene): void => {
       case KeyboardEventTypes.KEYDOWN:
         switch (kbInfo.event.key) {
           case 'c':
+            const previous = scene.activeCamera === camera ? camera : fixedCamera;
             scene.activeCamera = scene.activeCamera === camera ? fixedCamera : camera;
             scene.activeCamera.restoreState();
+            previous.detachControl(canvas);
+            scene.activeCamera.attachControl(canvas, true);
             break;
         }
         break;
