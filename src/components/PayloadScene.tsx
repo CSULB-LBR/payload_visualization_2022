@@ -1,8 +1,9 @@
 import React from "react";
-import { ArcRotateCamera, UniversalCamera, Vector3, HemisphericLight, MeshBuilder, Mesh, Color3, StandardMaterial, Texture, Material } from "@babylonjs/core";
+import { ArcRotateCamera, Vector3, HemisphericLight, MeshBuilder, Mesh, Color3, StandardMaterial, Texture, Material } from "@babylonjs/core";
 import { Curve3 } from "@babylonjs/core";
 import { Scene, KeyboardEventTypes } from "@babylonjs/core";
 import { GridMaterial } from "@babylonjs/materials";
+import {AdvancedDynamicTexture, TextBlock} from "@babylonjs/gui"
 import BabylonScene from "./BabylonScene"; // uses above component in same directory
 // import SceneComponent from 'babylonjs-hook'; // if you install 'babylonjs-hook' NPM.
 //import "./App.css";
@@ -11,15 +12,15 @@ let box: Mesh;
 
 const onSceneReady = (scene: Scene): void => {
   // This creates and positions a free camera (non-mesh)
-  const camera = new ArcRotateCamera("RotatingCamera", Math.PI / 4, Math.PI / 4, 5000, Vector3.Zero(), scene);
+  const camera = new ArcRotateCamera("RotatingCamera", -Math.PI / 2, Math.PI / 4, 5000, Vector3.Zero(), scene);
   camera.upperBetaLimit = Math.PI / 2.2;
   camera.wheelPrecision = 0.1;
   camera.maxZ = 20000;
   camera.upperRadiusLimit = 10000;
   camera.lowerRadiusLimit = 25;
 
-  // Parameters : name, position, scene
-  const fixedCamera = new UniversalCamera("TopView", new Vector3(0, 5000, 0), scene);
+  // Creates the bird's eye view camera 
+  const fixedCamera = new ArcRotateCamera("TopView", -Math.PI / 2, 0, 5600, Vector3.Zero(), scene);
   
   // Targets the camera to a particular position. In this case the scene origin
   fixedCamera.setTarget(Vector3.Zero());
@@ -38,18 +39,11 @@ const onSceneReady = (scene: Scene): void => {
   var light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
 
   // Default intensity is 1. Let's dim the light a small amount
-  light.intensity = 0.7;
+  light.intensity = 1;
   light.specular = new Color3(0.0);
 
-  // Our built-in 'box' shape.
-  // box = MeshBuilder.CreateBox("box", { size: 2 }, scene);
 
-  // Move the box upward 1/2 its height
-  // box.position.y = 1;
-
-  // Our built-in 'ground' shape.
-  // MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
-
+  // press c to change the camera
   scene.onKeyboardObservable.add((kbInfo) => {
     switch (kbInfo.type) {
       case KeyboardEventTypes.KEYDOWN:
@@ -73,6 +67,7 @@ const onSceneReady = (scene: Scene): void => {
   new Vector3(600, 800, 600),
   new Vector3(625, 0, 625), 60, scene);
   buildLandingPoint(new Vector3(625, 10, 625), scene);
+  buildLaunchRail(Vector3.Zero(), scene);
 };
 
 /**
@@ -104,7 +99,7 @@ const buildGridLines = (size: number, delta: number, scene: Scene): void => {
 
 const buildTerrain = (size: number, scene: Scene) => {
   const groundMaterial = new StandardMaterial('terrainMaterial', scene);
-  groundMaterial.diffuseTexture = new Texture("assets/terrain.jpg", scene);
+  groundMaterial.diffuseTexture = new Texture("assets/AlabamaCrop.png", scene);
 
   const ground = MeshBuilder.CreateGround("terrain", { width: size, height: size }, scene);
   ground.material = groundMaterial;
@@ -131,6 +126,31 @@ const buildLandingPoint = (location: Vector3, scene: Scene) => {
   groundMaterial.diffuseColor = new Color3(1, 0, 0);
   groundMaterial.alpha = 0.5;
   marker.material = groundMaterial;
+}
+
+const buildLaunchRail = (location: Vector3, scene:Scene) => {
+  const launchRail = Mesh.CreateSphere("launchRail", 16, 50, scene);
+  launchRail.position = location;
+  const launchRailMaterial = new StandardMaterial('launchRailMaterial', scene);
+  launchRailMaterial.diffuseColor = new Color3(0,.2,1);
+  launchRail.material = launchRailMaterial;
+
+  // label launch rail
+  // const plane = Mesh.CreatePlane("launchPlane", 100, scene);
+  // plane.parent = launchRail;
+  // plane.position.y = 50;
+  // plane.position.x = 5;
+  // plane.position.z = 5;
+  // const texture = AdvancedDynamicTexture.CreateForMesh(plane);
+  // const label = new TextBlock();
+  // label.text = "Launch Rail";
+  // label.fontSize = 50;
+  // label.color = "white";
+  // texture.addControl(label);
+}
+
+const buildLegend = () => {
+
 }
 
 const PayloadScene = () => (
