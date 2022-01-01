@@ -1,14 +1,12 @@
 import React from "react";
-import { ArcRotateCamera, Vector3, HemisphericLight, MeshBuilder, Mesh, Color3, StandardMaterial, Texture, Material } from "@babylonjs/core";
+import { ArcRotateCamera, Vector3, HemisphericLight, MeshBuilder, Mesh, Color3, StandardMaterial, Texture } from "@babylonjs/core";
 import { Curve3 } from "@babylonjs/core";
 import { Scene, KeyboardEventTypes } from "@babylonjs/core";
 import { GridMaterial } from "@babylonjs/materials";
-import {AdvancedDynamicTexture, TextBlock} from "@babylonjs/gui"
+//import {AdvancedDynamicTexture, TextBlock} from "@babylonjs/gui"
 import BabylonScene from "./BabylonScene"; // uses above component in same directory
 // import SceneComponent from 'babylonjs-hook'; // if you install 'babylonjs-hook' NPM.
 //import "./App.css";
-
-let box: Mesh;
 
 const onSceneReady = (scene: Scene): void => {
   // This creates and positions a free camera (non-mesh)
@@ -149,9 +147,6 @@ const buildLaunchRail = (location: Vector3, scene:Scene) => {
   // texture.addControl(label);
 }
 
-const buildLegend = () => {
-
-}
 
 const PayloadScene = () => (
     <BabylonScene antialias onSceneReady={onSceneReady} onRender={onRender} id="my-canvas" />

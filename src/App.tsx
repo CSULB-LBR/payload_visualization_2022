@@ -1,11 +1,12 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import HUD from './components/HUD';
 import PayloadScene from './components/PayloadScene';
 
 function App() {
   return (
     <div className="App">
+      <HUD />
       <PayloadScene />
     </div>
   );
