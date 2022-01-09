@@ -3,7 +3,7 @@ import { ArcRotateCamera, Vector3, HemisphericLight, MeshBuilder, Mesh, Color3, 
 import { Curve3 } from "@babylonjs/core";
 import { Scene, KeyboardEventTypes } from "@babylonjs/core";
 import { GridMaterial } from "@babylonjs/materials";
-//import {AdvancedDynamicTexture, TextBlock} from "@babylonjs/gui"
+import {AdvancedDynamicTexture, TextBlock} from "@babylonjs/gui"
 import BabylonScene from "./BabylonScene"; // uses above component in same directory
 // import SceneComponent from 'babylonjs-hook'; // if you install 'babylonjs-hook' NPM.
 //import "./App.css";
@@ -19,12 +19,14 @@ const onSceneReady = (scene: Scene): void => {
 
   // Creates the bird's eye view camera 
   const fixedCamera = new ArcRotateCamera("TopView", -Math.PI / 2, 0, 5600, Vector3.Zero(), scene);
+  fixedCamera.wheelPrecision = 0.1;
   
   // Targets the camera to a particular position. In this case the scene origin
   fixedCamera.setTarget(Vector3.Zero());
 
   // Remove all inputs for the camera, we don't want to handle any.
   fixedCamera.inputs.clear();
+  fixedCamera.inputs.addMouseWheel();
 
   const canvas = scene.getEngine().getRenderingCanvas();
 
@@ -60,6 +62,7 @@ const onSceneReady = (scene: Scene): void => {
 
   buildGridLines(5000, 250, scene);
   buildTerrain(5000, scene);
+  buildLabels(5000, 250, scene);
   buildCubicBezierCurve(Vector3.Zero(),
   new Vector3(300, 800, 400),
   new Vector3(600, 800, 600),
@@ -133,19 +136,62 @@ const buildLaunchRail = (location: Vector3, scene:Scene) => {
   launchRailMaterial.diffuseColor = new Color3(0,.2,1);
   launchRail.material = launchRailMaterial;
 
-  // label launch rail
-  // const plane = Mesh.CreatePlane("launchPlane", 100, scene);
-  // plane.parent = launchRail;
-  // plane.position.y = 50;
-  // plane.position.x = 5;
-  // plane.position.z = 5;
+//  label launch rail
+  // const plane = MeshBuilder.CreateGround('launch', { width: 500, height: 500 }, scene);
+  // plane.position.x = -2600;
+  // plane.position.y = 100;
+  // //plane.parent = launchRail;
+  // //plane.position.y = 50;
+  // //plane.position.x = 5;
+  // //plane.position.z = 5;
+  // //plane.rotate
   // const texture = AdvancedDynamicTexture.CreateForMesh(plane);
   // const label = new TextBlock();
-  // label.text = "Launch Rail";
-  // label.fontSize = 50;
-  // label.color = "white";
+  // label.text = "A";
+  // label.fontSize = 400;
+  // label.color = "red";
   // texture.addControl(label);
 }
+
+const buildLabels = (size: number, delta: number, scene: Scene) => {
+  var charCode = 65;
+  var count = 1;
+  for (var start = (size / 2); start > -(size / 2); start -= delta) {
+    const plane = MeshBuilder.CreateGround(`label${start}`, { width: 250, height: 250 }, scene);
+    plane.position.x = -2625;
+    plane.position.z = start - (delta / 2);
+    const texture = AdvancedDynamicTexture.CreateForMesh(plane);
+    const label = new TextBlock();
+    label.text = String.fromCharCode(charCode++);
+    label.fontSize = 600;
+    label.color = "white";
+    texture.addControl(label);
+
+    const plane2 = MeshBuilder.CreateGround(`label${start}-${count}`, { width: 250, height: 250 }, scene);
+    plane2.position.x = (-start + (delta / 2));
+    plane2.position.z = 2625;
+    const texture2 = AdvancedDynamicTexture.CreateForMesh(plane2);
+    const label2 = new TextBlock();
+    label2.text = (count++).toString();
+    label2.fontSize = 600;
+    label2.color = "white";
+    texture2.addControl(label2);
+  }
+  // const plane = MeshBuilder.CreateGround('launch', { width: 500, height: 500 }, scene);
+  // plane.position.x = -2600;
+  // plane.position.y = 100;
+  // //plane.parent = launchRail;
+  // //plane.position.y = 50;
+  // //plane.position.x = 5;
+  // //plane.position.z = 5;
+  // //plane.rotate
+  // const texture = AdvancedDynamicTexture.CreateForMesh(plane);
+  // const label = new TextBlock();
+  // label.text = "A";
+  // label.fontSize = 400;
+  // label.color = "red";
+  // texture.addControl(label);
+};
 
 
 const PayloadScene = () => (
