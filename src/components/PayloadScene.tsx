@@ -63,11 +63,11 @@ const onSceneReady = (scene: Scene): void => {
   buildGridLines(5000, 250, scene);
   buildTerrain(5000, scene);
   buildLabels(5000, 250, scene);
-  buildCubicBezierCurve(Vector3.Zero(),
-  new Vector3(300, 800, 400),
-  new Vector3(600, 800, 600),
-  new Vector3(625, 0, 625), 60, scene);
-  buildLandingPoint(new Vector3(625, 10, 625), scene);
+  // buildCubicBezierCurve(Vector3.Zero(),
+  // new Vector3(300, 800, 400),
+  // new Vector3(600, 800, 600),
+  // new Vector3(625, 0, 625), 60, scene);
+  // buildLandingPoint(new Vector3(625, 10, 625), scene);
   buildLaunchRail(Vector3.Zero(), scene);
 };
 
@@ -100,7 +100,7 @@ const buildGridLines = (size: number, delta: number, scene: Scene): void => {
 
 const buildTerrain = (size: number, scene: Scene) => {
   const groundMaterial = new StandardMaterial('terrainMaterial', scene);
-  groundMaterial.diffuseTexture = new Texture("assets/AlabamaCrop.png", scene);
+  groundMaterial.diffuseTexture = new Texture("assets/FARSCrop.png", scene);
 
   const ground = MeshBuilder.CreateGround("terrain", { width: size, height: size }, scene);
   ground.material = groundMaterial;

@@ -2,8 +2,8 @@ import React from "react";
 
 const Title = () => (
    <div className="title">
-      Bragg Farms Nasa Student Launch Field
-      <div className="subtitle">coordinates go here</div>
+      Friends of Amateur Rocketry Site
+      <div className="subtitle">35°20'52.0"N, 117°48'33.0"W</div>
    </div>
 );
 
