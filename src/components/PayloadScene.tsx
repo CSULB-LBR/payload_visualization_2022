@@ -59,15 +59,23 @@ const onSceneReady = (scene: Scene): void => {
         break;
     }
   });
-
+  const floor_height = 10;
+  var x_in, z_in;
   buildGridLines(5000, 250, scene);
   buildTerrain(5000, scene);
   buildLabels(5000, 250, scene);
-  // buildCubicBezierCurve(Vector3.Zero(),
-  // new Vector3(300, 800, 400),
-  // new Vector3(600, 800, 600),
-  // new Vector3(625, 0, 625), 60, scene);
-  // buildLandingPoint(new Vector3(625, 10, 625), scene);
+
+  //inputs from grid estimation of dead reckoning program
+  x_in = 375;
+  z_in = 875;
+
+  // //estimated true curve
+  // buildCubicBezierCurve(Vector3.Zero(),new Vector3(-100, 4700, 170),new Vector3(250, 100, 555),new Vector3(x_in, 0, z_in), 60, scene, new Color3(0,1,0));
+  // buildCubicBezierCurve(Vector3.Zero(),new Vector3(-200, 4500, 51),new Vector3(300, 500, 400),new Vector3(-750, 0, 591), 60, scene, new Color3(1,0,1));
+  // //calculated curve + dead reckoned curve
+  // buildLandingPoint(new Vector3(x_in, floor_height, z_in), scene, new Color3(0,1,0));
+  // buildLandingPoint(new Vector3(-875, floor_height, 625), scene, new Color3(1,0,1));
+
   buildLaunchRail(Vector3.Zero(), scene);
 };
 
@@ -100,31 +108,46 @@ const buildGridLines = (size: number, delta: number, scene: Scene): void => {
 
 const buildTerrain = (size: number, scene: Scene) => {
   const groundMaterial = new StandardMaterial('terrainMaterial', scene);
-  groundMaterial.diffuseTexture = new Texture("assets/FARSCrop.png", scene);
+  //texture for FAR field
+  // groundMaterial.diffuseTexture = new Texture("assets/FARSCrop.png", scene);
+  //texture for MDARS field
+  groundMaterial.diffuseTexture = new Texture("assets/MDARSCrop.png", scene);
 
   const ground = MeshBuilder.CreateGround("terrain", { width: size, height: size }, scene);
   ground.material = groundMaterial;
 };
 
 const buildCubicBezierCurve = (origin: Vector3, c1: Vector3, c2: Vector3, 
-                               end: Vector3, numPoints: number, scene: Scene) => {
+                               end: Vector3, numPoints: number, scene: Scene, color: Color3) => {
   // CURVE3 : Bezier Cubic Curve
   const cubicBezierVectors = Curve3.CreateCubicBezier(origin, c1, c2, end, numPoints);
     
   const cubicBezierCurve = Mesh.CreateLines("cbezier", cubicBezierVectors.getPoints(), scene);
-  cubicBezierCurve.color = new Color3(0, 1, 0);
+  cubicBezierCurve.color = color;
 };
 
-const buildLandingPoint = (location: Vector3, scene: Scene) => {
+const buildLandingPoint = (location: Vector3, scene: Scene, color: Color3) => {
   /*const marker = Mesh.CreateLines('landing', [location.add(new Vector3(-125, 0, -125)),
                                               location.add(new Vector3(125, 0, 125)),
                                               location.add(new Vector3(-125, 0, 125)),
                                               location.add(new Vector3(125, 0, -125))],
                                               scene);*/
   const marker = MeshBuilder.CreateGround('landing', { width: 250, height: 250 }, scene);
+
+  // //mapping in order to have 1-1 coordinate input
+  // if(location._x == 1){
+  //   location.set(location._x*125, location._y, location._z);
+  // }
+  // if(location._z == 1){
+  //   location.set(location._x, location._y, location._z*125);
+  // }
+  // else{
+  //   location.set((location._x*250)+125, location._y, (location._z*250)+125);
+  // }
+
   marker.position = location;
   const groundMaterial = new StandardMaterial('landingMaterial', scene);
-  groundMaterial.diffuseColor = new Color3(1, 0, 0);
+  groundMaterial.diffuseColor = color;
   groundMaterial.alpha = 0.5;
   marker.material = groundMaterial;
 }

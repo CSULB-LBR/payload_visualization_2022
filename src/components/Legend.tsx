@@ -7,7 +7,7 @@ const Legend = () => (
          <div className="blue-box"></div>Launch Rail
       </div>
       <div className="legend-item">
-         <div className="red-box"></div>Landing Area
+         <div className="green-box"></div>Landing Area
       </div>
       <div className="legend-item">
          <div className="green-box"></div>Flight Path
